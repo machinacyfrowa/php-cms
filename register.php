@@ -9,8 +9,41 @@
         crossorigin="anonymous">
 </head>
 <body>
+    
     <div class="container">
-        
+        <?php if(isset($_REQUEST['email'])) : ?>
+            <!-- Jeśli został wysłany formularz to... -->
+            <?php
+            //przepisz dane z formularza do lokalnych zmiennych
+            $email = $_REQUEST['email'];
+            //jeśli hasła się nie zgadzają KYS
+            if($_REQUEST['password'] != $_REQUEST['passwordRepeat'])
+                die("Hasła niezgodne");
+            //przepisujemy hasło...
+            $passwd = $_REQUEST['password'];
+            //liczymy hash hasła
+            $passwordHash = password_hash($passwd, PASSWORD_ARGON2I);
+            //łączymy się z bazą
+            $db = new mysqli("localhost", "root", '', "cms");
+            //szykujemy kwerendę
+            $sql = "INSERT INTO user (email, password) VALUES (?, ?)";
+            $q = $db->prepare($sql);
+            //podstaw dane
+            $q->bind_param("ss", $email, $passwordHash);
+            $success = $q->execute();
+            if(!$success)
+                die("Bład przy próbie założenia konta");
+            ?>
+        <div class="row mt-5">
+            <div class="col-6 offset-3">
+                <h1 class="text-center">Konto założone</h1>
+                <div class="text-center">
+                <a href="index.php">Powrót do strony</a>
+                </div>
+            </div>
+        </div>
+        <?php else : ?>
+            <!-- Jeśli nie został jeszcze wysłany formularz to... -->
         <div class="row mt-5">
             <div class="col-6 offset-3">
                 <h1 class="text-center">Rejestracja użytkownika</h1>
@@ -25,7 +58,7 @@
                 </form>
             </div>
         </div>
-        
+        <?php endif; ?>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
