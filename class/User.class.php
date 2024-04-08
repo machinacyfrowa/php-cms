@@ -7,18 +7,29 @@ class User {
 
     //metody klasy User czyli "co użytkownik ROBI"
 
-    public static function Register(string $email, string $password) {
+    //konstruktor
+    public function __construct(int $id, string $email)
+    {
+        //this oznacza tworzony właśnie obiekt lub instancję klasy do której się odnosimy
+        $this->id = $id;
+        $this->email = $email;
+    }
+
+
+    public static function Register(string $email, string $password) : bool {
         //funkcja rejestruje nowego użytkownika do bazy danych....
+        //funkcja zwraca true jeśli się udało lub false jeśli się nie udało
         $db = new mysqli('localhost', 'root', '', 'cms');
         $sql = "INSERT INTO user (email, password) VALUES (?, ?)";
         $q = $db->prepare($sql);
         $passwordHash = password_hash($password, PASSWORD_ARGON2I);
         $q->bind_param("ss", $email, $passwordHash);
-        $q->execute();
+        $result = $q->execute();
+        return $result;
     }
-    public static function Login(string $email, string $password) {
+    public static function Login(string $email, string $password) : bool {
         //funkcja loguje istniejacego uzytkownika do bazy danych...
-        //funkcja zapisuje id użytkownika do sesji i zwraca true jeśli użytkownik istnieje
+        //funkcja zapisuje użytkownika do sesji i zwraca true jeśli użytkownik istnieje
         //funkcja zwraca false jeśli użytkownik o takim haśle nie istnieje
         $db = new mysqli('localhost', 'root', '', 'cms');
         $sql = "SELECT * FROM user WHERE email = ? LIMIT 1";
@@ -33,7 +44,8 @@ class User {
         if(password_verify($password, $passwordHash)) {
             //hasło się zgadza
             //zapisz dane użytkownika do sesji
-            $_SESSION['user_id'] = $id;
+            $user = new User($id, $email);
+            $_SESSION['user'] = $user;
             return true;
         } else {
             //hasło się nie zgadza
