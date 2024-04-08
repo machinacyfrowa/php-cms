@@ -11,7 +11,7 @@
 <body>
     
     <div class="container">
-        <?php if(isset($_REQUEST['email'])) : ?>
+        <?php if(isset($_REQUEST['submit'])) : ?>
             <!-- Jeśli został wysłany formularz to... -->
             <?php
             //przepisz dane z formularza do lokalnych zmiennych
@@ -52,7 +52,7 @@
                     <input class="form-control mb-1" type="email" id="emailInput" name="email" required>
                     <label class="form-label mt-3" for="passwordInput">Hasło:</label>
                     <input class="form-control mb-1" type="password" id="passwordInput" name="password" required>
-                    <label class="form-label mt-3" for="passwordInputRepeat">Hasło:</label>
+                    <label class="form-label mt-3" for="passwordInputRepeat">Hasło (ponownie):</label>
                     <input class="form-control mb-1" type="password" id="passwordInputRepeat" name="passwordRepeat" required>
                     <button type="submit" class="btn btn-primary w-100 mt-3">Zarejestruj</button>
                 </form>

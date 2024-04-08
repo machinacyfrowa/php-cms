@@ -10,10 +10,14 @@
 </head>
 <body>
     <div class="container">
+    <?php if(isset($_REQUEST['submit'])) : ?>
+        <!-- Jeśli został wysłany formularz to... -->
         
+    <?php else : ?>
+        <!-- Jeśli nie został jeszcze wysłany formularz to... -->
         <div class="row mt-5">
             <div class="col-6 offset-3">
-                <h1 class="text-center">Rejestracja użytkownika</h1>
+                <h1 class="text-center">Logowanie użytkownika</h1>
                 <form action="login.php" method="post">
                     <label class="form-label mt-3" for="emailInput">Adres e-mail:</label>
                     <input class="form-control mb-1" type="email" id="emailInput" name="email" required>
@@ -23,7 +27,7 @@
                 </form>
             </div>
         </div>
-        
+    <?php endif; ?>    
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
