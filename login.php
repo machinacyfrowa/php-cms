@@ -49,6 +49,9 @@ require("./class/User.class.php");
                     <input class="form-control mb-1" type="password" id="passwordInput" name="password" required>
                     <button type="submit" class="btn btn-primary w-100 mt-3" name="submit">Zaloguj</button>
                 </form>
+                <a href="register.php">
+                    <button class="btn btn-primary w-100 mt-3" name="submit">Zarejestruj się</button>
+                </a>
             </div>
         </div>
     <?php endif; ?>    
