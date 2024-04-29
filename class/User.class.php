@@ -14,6 +14,10 @@ class User {
         $this->id = $id;
         $this->email = $email;
     }
+    //getery:
+    public function getEmail() : string {
+        return $this->email;
+    }
 
 
     public static function Register(string $email, string $password) : bool {
