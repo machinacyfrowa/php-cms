@@ -9,8 +9,11 @@ if(isset($_REQUEST['oldPassword']) && isset($_REQUEST['newPassword']) && isset($
     $newPasswordRepeat = $_REQUEST['newPasswordRepeat'];
     if($newPassword == $newPasswordRepeat) {
         //nowe hasła zgodne
-        //todo: odnies sie do klasy user
-        $result = "Hasło zostało zmienione!";
+        $success = $u->ChangePassword($oldPassword, $newPassword);
+        if($success)
+            $result = "Hasło zostało zmienione!";
+        else 
+            $result = "Nie udało się zmienić hasła!"; //praktycznie nie ma szans, żeby to wystąpiło
     }
     else {
         //nowe hasła niezgodne
