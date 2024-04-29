@@ -60,7 +60,7 @@ class User {
     }
     public function Logout() {
         //funkcja wylogowuje użytkownika
-
+        session_destroy();
     }
     
 }
