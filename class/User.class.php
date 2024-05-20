@@ -15,6 +15,9 @@ class User {
         $this->email = $email;
     }
     //getery:
+    public function getID() : int {
+        return $this->id;
+    }
     public function getEmail() : string {
         return $this->email;
     }

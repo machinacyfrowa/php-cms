@@ -63,5 +63,47 @@ class Post {
         // Return the array of Post objects
         return $posts;
     }
+    static function CreatePost(string $title, string $description) : bool {
+        
+        //wgrywanie pliku
+        //zdefiniuj folder docelowy
+        $targetDirectory = "img/";
+        //użyj oryginalnej nazwy pliku
+        //$fileName = $_FILES['file']['name'];
+        //modyfikacja - użyj sha256
+        $fileName = hash('sha256', $_FILES['file']['name'].microtime());
+        
+        //przesuń plik z lokalizacji tymczasowej do docelowej
+        //move_uploaded_file($_FILES['file']['tmp_name'], $targetDirectory.$fileName);
+        //zmiana - użyj imagewebp do zapisania
+
+        //po 0!: wczytaj zawartość pliku graficznego do stringa
+        $fileString = file_get_contents($_FILES['file']['tmp_name']);
+
+        //po 1!: wczytaj otrzymany z formularza obrazek używając biblioteki GD do obiektu klasy GDImage
+        $gdImage = imagecreatefromstring($fileString);
+
+        //przygotuj pełny url pliku
+        $finalUrl = "http://localhost/cms/img/".$fileName.".webp";
+        //imagewebp nie umie z http - link wewnętrzny
+        $internalUrl = "img/".$fileName.".webp";
+
+        //po 2!: zapisz obraz skonwertowany do webp pod nową nazwą pliku + rozszerzenie webp
+        imagewebp($gdImage, $internalUrl);
+
+        //dopisz posta do bazy
+        //tymczasowo - authorID
+        $authorID = $_SESSION['user']->getID();
+
+
+        $db = new mysqli('localhost', 'root', '', 'cms');
+        $q = $db->prepare("INSERT INTO post (authorID, imgUrl, title) VALUES (?, ?, ?)");
+        //pierwszy atrybut jest liczba, dwa pozostale tekstem wiec integer string string
+        $q->bind_param("iss", $authorID, $finalUrl, $title);
+        if($q->execute())
+            return true;
+        else
+            return false;
+    }
 }
 ?>
