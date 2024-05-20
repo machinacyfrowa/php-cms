@@ -6,7 +6,7 @@ class Post {
     private $timestamp;
     private $imgUrl;
 
-    public function __construct(int $id, int $author, string $title, string $timestamp, string $imgUrl) {
+    public function __construct(int $id, string $author, string $title, string $timestamp, string $imgUrl) {
         $this->id = $id;
         $this->author = $author;
         $this->title = $title;
@@ -18,10 +18,10 @@ class Post {
         return $this->title;
     }
     public function GetAuthor() : string {
-        return "";
+        return $this->author;
     }
     public function GetAuthorEmail() : string {
-        return "";
+        return $this->author;
     }
     public function GetImageURL() : string {
         return $this->imgUrl;
@@ -35,7 +35,11 @@ class Post {
         $db = new mysqli('localhost', 'root', '', 'cms');
     
         // Prepare the SQL query
-        $sql = "SELECT * FROM post ORDER BY timestamp DESC LIMIT 10";
+        $sql = "SELECT post.ID, post.title, post.timestamp, post.imgUrl, user.email AS author 
+                FROM `post` 
+                INNER JOIN user ON user.id = post.authorID 
+                ORDER BY timestamp DESC 
+                LIMIT 10";
         $query = $db->prepare($sql);
     
         // Execute the query
